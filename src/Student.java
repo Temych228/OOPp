@@ -2,40 +2,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Student extends Person {
-    private static int id = 1;
-    private int id_gen;
+    private static int idCounter = 1;
+    private final int studentID;
     private List<Integer> grades;
 
-    public Student(String name, String surname, int age, boolean gender) {
+    public Student(String name, String surname, int age, boolean gender, List<Integer> grades) {
         super(name, surname, age, gender);
-        this.id_gen = id++;
-        this.grades = new ArrayList<>();
+        this.studentID = idCounter++;
+        this.grades = grades;
+    }
+
+    public List<Integer> getGrades() {
+        return grades;
+    }
+
+    public void setGrades(List<Integer> grades) {
+        this.grades = grades;
     }
 
     public void addGrade(int grade) {
-        if (grade >= 0 && grade <= 100) {
-            grades.add(grade);
+        if (grades == null) {
+            grades = new ArrayList<>();
         }
+        grades.add(grade);
     }
 
     public double calculateGPA() {
-        if (grades.isEmpty()) {
-            return 0.0;
+        int total = 0;
+        for (int grade : grades) {
+            total += grade;
         }
-        int sum = 0;
-        for (int g : grades) {
-            sum += g;
-        }
-        return (double) sum / grades.size();
-    }
-
-    public int getId_gen() {
-        return id_gen;
+        return grades.isEmpty() ? 0 : (double) total / grades.size();
     }
 
     @Override
     public String toString() {
-        return super.toString()
-                + " I am a student with ID " + id_gen + ".";
+        return super.toString() + " I am a student with ID " + studentID + ". GPA: " + calculateGPA();
     }
 }
